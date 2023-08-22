@@ -1,0 +1,100 @@
+Q1
+****switch 1/ 2****
+en
+conf t
+
+hostname S1
+
+line console 0
+password cisco
+login
+exit
+
+enable secret cisco
+
+line vty?
+line vty 0 15
+password cisco
+login
+exit
+
+service password-encryption
+
+banner motd #copy#
+
+int VLAN 1
+ip address 192.168.1.7 255.255.255.0
+no shut
+exit
+exit
+
+copy running-cofig startup-config
+write
+
+
+Q2	
+*****Switch 01/02*****
+	vlan 10
+	name VLAN10
+	vlan 20
+        name VLAN20
+
+	int range f0/1-2
+	switchport mode access
+	switchport access vlan 10
+	int range f0/3-4
+	switchport mode access
+	switchport access vlan 20
+
+
+*****Router 01/02*****
+	int g0/0/0
+	ip address 192.168.1.129 255.255.255.224
+	no shutdown
+	int g0/0/1.10
+	encapsulation dot1Q 10
+	ip address 192.168.1.1 255.255.255.224
+	no shutdown
+
+
+*****Switch 01/02*****
+	int g0/1
+	switchport mode tr
+
+
+*****Router 01/02*****
+	no ip domain-lookup
+
+	ip domain-name ccna.com
+
+	username ccna password ccna
+
+	crypto key generate rsa general-keys modulus 1024
+
+	line vty 0 4
+	transport input ssh
+	login local
+
+Router & Switch troubleshoot
+	ping
+	traceroute
+	show ip route
+	show ip interface brief
+	show cdp neighbors
+
+Exclude 
+
+  ip dhcp excluded-adress 192.168.1.1 192.168.1.10
+
+pool
+   ip dhcp pool R1-LAN
+config pool
+    network Ip subnet
+    default-router IP (first)
+    dns-server IP (last)
+
+helper address
+     interface g0/1
+     ip helper-address 192.168.5.1
+config static rout
+    ip routr ip subnet ip
